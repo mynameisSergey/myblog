@@ -68,8 +68,8 @@ return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
     @Override
     public long save(Post post) {
         String sql = (hasImage(post)) ?
-                "insert into post(title, text, tags) values(?, ?, ?)" :
-                "insert into post(title, text, tags, image) values(?, ?, ?, ?)";
+                "insert into post(title, text, tags, image) values(?, ?, ?, ?)" :
+                "insert into post(title, text, tags) values(?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -107,6 +107,15 @@ return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
         return post.getImage() != null && post.getImage().length > 0;
     }
 
+    @Override
+    public void likeById(Long id, int likeCount) {
+        jdbcTemplate.update("update post set likes_count = ? where id = ?", likeCount, id);
+    }
+
+    @Override
+    public void deleteById(Long id){
+        jdbcTemplate.update("delete from post where id = ?", id);
+    }
 
 }
 

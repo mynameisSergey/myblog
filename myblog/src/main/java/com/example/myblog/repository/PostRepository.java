@@ -16,4 +16,8 @@ public interface PostRepository {
     long save(Post post);
 
     void updateById(Long id, Post post);
+
+    void likeById(Long id, int likeCount);
+
+    void deleteById(Long id);
 }
