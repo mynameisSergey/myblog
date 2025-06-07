@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Fast {
+public class Post {
     private Long id;
     private byte[] image;
     private String title;
