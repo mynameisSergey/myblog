@@ -25,20 +25,7 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public List<Post> getPosts(String search, int limit, int offset) {
-        List<Post> posts = jdbcTemplate.query(
-                "select id, title, text, tags, likes_count, image from post " +
-                        "where tags like CONCAT('%', COALESCE(?, ''), '%') " +
-                        "order by id desc limit ? offset ?",
-                (rs, rowNum) -> Post.builder()
-                        .id(rs.getLong("id"))
-                        .title(rs.getString("title"))
-                        .text(rs.getString("text"))
-                        .tags(rs.getString("tags"))
-                        .likesCount(rs.getInt("likes_count"))
-                        .image(rs.getBytes("image"))
-                        .build(),
-                search, limit, offset
-        );
+        List<Post> posts = jdbcTemplate.query("select id, title, text, tags, likes_count, image from post " + "where tags like CONCAT('%', COALESCE(?, ''), '%') " + "order by id desc limit ? offset ?", (rs, rowNum) -> Post.builder().id(rs.getLong("id")).title(rs.getString("title")).text(rs.getString("text")).tags(rs.getString("tags")).likesCount(rs.getInt("likes_count")).image(rs.getBytes("image")).build(), search, limit, offset);
         log.info("Выбрано {} постов", posts.size());
         return posts;
     }
@@ -51,25 +38,13 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public Optional<Post> getById(Long id) {
-        List<Post> posts = jdbcTemplate.query("select id, title, text, tags, likes_count, image FROM post where id = ?",
-                (rs, rowNum) ->
-                    Post.builder()
-                            .id(rs.getLong("id"))
-                            .title(rs.getString("title"))
-                            .text(rs.getString("text"))
-                            .tags(rs.getString("tags"))
-                            .likesCount(rs.getInt("likes_count"))
-                            .image(rs.getBytes("image"))
-                            .build(),
-                id);
-return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
+        List<Post> posts = jdbcTemplate.query("select id, title, text, tags, likes_count, image FROM post where id = ?", (rs, rowNum) -> Post.builder().id(rs.getLong("id")).title(rs.getString("title")).text(rs.getString("text")).tags(rs.getString("tags")).likesCount(rs.getInt("likes_count")).image(rs.getBytes("image")).build(), id);
+        return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
     }
 
     @Override
     public long save(Post post) {
-        String sql = (hasImage(post)) ?
-                "insert into post(title, text, tags, image) values(?, ?, ?, ?)" :
-                "insert into post(title, text, tags) values(?, ?, ?)";
+        String sql = (hasImage(post)) ? "insert into post(title, text, tags, image) values(?, ?, ?, ?)" : "insert into post(title, text, tags) values(?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -86,9 +61,7 @@ return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
 
     @Override
     public void updateById(Long id, Post post) {
-        String sql = (hasImage(post))
-                ? "update post set title = ?, text = ?, tags = ?, image = ? where id = ?"
-                : "update post set title = ?, text = ?, tags = ? where id = ?";
+        String sql = (hasImage(post)) ? "update post set title = ?, text = ?, tags = ?, image = ? where id = ?" : "update post set title = ?, text = ?, tags = ? where id = ?";
         List<Object> params = formParams(post, id);
         jdbcTemplate.update(sql, params.toArray());
     }
@@ -113,7 +86,7 @@ return posts.isEmpty() ? Optional.empty() : Optional.of(posts.getFirst());
     }
 
     @Override
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         jdbcTemplate.update("delete from post where id = ?", id);
     }
 
