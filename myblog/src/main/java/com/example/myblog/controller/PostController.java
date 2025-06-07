@@ -1,5 +1,7 @@
 package com.example.myblog.controller;
 
+import com.example.myblog.model.DTO.PostFullDto;
+import com.example.myblog.model.DTO.PostsWithParametersDto;
 import com.example.myblog.model.entity.Post;
 import com.example.myblog.service.PostService;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ public class PostController {
     }
 
     @GetMapping("/")
-    public String redirectPosts(){
+    public String redirectPosts() {
         return "redirect:/posts";
     }
 
@@ -29,9 +31,11 @@ public class PostController {
     public String getPosts(Model model, @RequestParam(defaultValue = "", name = "search") String search,
                            @RequestParam(defaultValue = 10, name = "pageSize") int pageSize,
                            @RequestParam(defaultValue = 1, name = "pageNumber") int pageNumber) {
-
-        List<Post> posts = postService.findPosts(search, pageSize, pageSize);
-        model.addAllAttributes(posts);
-                return "posts";
+        PostsWithParametersDto posts = postService.getPosts(search, pageSize, pageNumber);
+        model.addAllAttributes("posts", posts.getPosts());
+        model.addAttribute("search", search);
+        model.addAllAttributes("paging", posts.getPaging());
+        return "posts";
     }
+
 }
