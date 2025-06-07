@@ -1,7 +1,11 @@
 package com.example.myblog.model.DTO;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+import java.util.List;
+@Data
+@AllArgsConstructor
 public class PostsWithParametersDto {
     List<PostFullDto> posts;
     private String search;

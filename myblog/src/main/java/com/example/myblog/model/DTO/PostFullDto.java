@@ -21,8 +21,9 @@ public class PostFullDto {
     private int likesCount;
     private List<String> tags;
     private List<Comment> comments  = new ArrayList<>();
+
     public String getTextPreview() {
         if (text == null || text.isEmpty()) return null;
-        return text.get(0);
+        return text.getFirst();
     }
 }
