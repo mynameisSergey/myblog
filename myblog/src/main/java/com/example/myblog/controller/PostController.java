@@ -28,7 +28,7 @@ public class PostController {
     public String getPosts(Model model,
                            @RequestParam(defaultValue = "", name = "search") String search,
                            @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
-                           @RequestParam(defaultValue = "1", name = "pageNumber") int pageNumber    ) {
+                           @RequestParam(defaultValue = "1", name = "pageNumber") int pageNumber) {
         PostsWithParametersDto posts = postService.getPosts(search, pageNumber, pageSize);
         model.addAttribute("posts", posts.getPosts());
         model.addAttribute("search", search);

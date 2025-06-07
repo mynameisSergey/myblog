@@ -1,5 +1,6 @@
 package com.example.myblog.mapper;
 
+import com.example.myblog.model.DTO.PostDto;
 import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.entity.Post;
 import lombok.RequiredArgsConstructor;
