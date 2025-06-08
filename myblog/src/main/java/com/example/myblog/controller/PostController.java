@@ -4,6 +4,7 @@ import com.example.myblog.model.DTO.PostDto;
 import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.DTO.PostsWithParametersDto;
 import com.example.myblog.model.entity.Post;
+import com.example.myblog.service.CommentService;
 import com.example.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("/")
     public String redirectPosts() {
@@ -55,5 +57,38 @@ public class PostController {
         return "redirect:/posts/" + postFullDto.getId();
     }
 
+    @GetMapping("/images/{id}")
+    public byte[] getImage(@PathVariable("id") Long id) {
+        return postService.getImage(id);
+    }
+
+    @PostMapping("/{id}/like")
+    public String likePost(@PathVariable("id") Long id,
+                           @RequestParam("like") boolean like) {
+        postService.likePostBById(id, like);
+        return "redirect:/posts/" + id;
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editPostPage(@PathVariable("id") Long id, Model model) {
+        PostDto postDto = postService.getPostDtoById(id);
+        model.addAttribute("post", postDto);
+        return "redirect:add-post";
+    }
+
+    @PostMapping("/{id}")
+    public String editPost(@PathVariable("id") Long id,
+                           @ModelAttribute("post") PostDto postDto) {
+        postService.editPostById(id, postDto);
+        return "redirect:/posts/" + id;
+    }
+
+    @PostMapping("/{id}/comments")
+    public String addComment(Model model, @PathVariable("id") Long id,
+                             @RequestParam(defaultValue = "", name = "text") String text) {
+        model.addAttribute("text", text);
+        commentService, save(id, text);
+        return "redirect:/posts/" + id;
+    }
 
 }

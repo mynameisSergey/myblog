@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -30,7 +31,8 @@ public class PostService {
     public PostsWithParametersDto getPosts(String search, int pageNumber, int pageSize) {
         List<Post> posts = postRepository.getPosts(search, pageSize, (pageNumber - 1) * pageSize);
         List<PostFullDto> postFullDtos = postMapper.toListDto(posts);
-        postFullDtos.forEach(postFullDto -> postFullDto.setComments(commentService.getPostCommentsById(post.getId())));
+        postFullDtos.forEach(postFullDto ->
+                postFullDto.setComments(commentService.getPostCommentsById(post.getId())));
         PagingParametersDto pagingParametersDto = PagingParametersDto.builder()
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
@@ -41,7 +43,7 @@ public class PostService {
 
     }
 
-    public Post getPostById(Long id){
+    public Post getPostById(Long id) {
         return postRepository.getById(id).orElse(new Post());
     }
 
@@ -54,6 +56,35 @@ public class PostService {
     }
 
     public PostFullDto savePost(PostDto postDto) {
+        PostFullDto postFullDto = getPostFullDtoById(postRepository.save(postMapper.toPost(postDto)));
+        if (postFullDto != null)
+            postFullDto.setComments(commentService.getPostComments(post.getId()));
+        return postFullDto;
 
     }
+
+    public byte[] getImage(Long postId) {
+        return postRepository.getById(postId).orElse(new Post()).getImage();
+    }
+
+    public void likePostBById(Long id, boolean like) {
+        int currentLikesCount = 0;
+        Post post = getPostById(id);
+        if (post != null) {
+            currentLikesCount = post.getLikes_count();
+        }
+        postRepository.likeById(id, (like ? currentLikesCount + 1 :
+                (currentLikesCount > 0 ? currentLikesCount - 1 : 0)));
+    }
+
+    public PostDto getPostDtoById(Long id) {
+        return postMapper.toPostDto(getPostById(id));
+    }
+
+    public void editPostById(Long id, PostDto postDto) {
+        postRepository.updateById(id, postMapper.toPost(postDto));
+    }
+
+
 }
+
