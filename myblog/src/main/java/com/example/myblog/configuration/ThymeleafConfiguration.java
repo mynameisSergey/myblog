@@ -14,7 +14,7 @@ public class ThymeleafConfiguration {
     @Bean
     public ITemplateResolver templateResolver() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setPrefix("/templates/"); // Директория для хранения HTML-шаблонов
+        resolver.setPrefix("classpath:/templates/"); // Директория для хранения HTML-шаблонов
         resolver.setSuffix(".html");       // Суффикс шаблонов
         resolver.setTemplateMode("HTML");  // Режим шаблонов
         resolver.setCharacterEncoding("UTF-8");

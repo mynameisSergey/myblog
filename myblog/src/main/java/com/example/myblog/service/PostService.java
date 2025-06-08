@@ -2,6 +2,7 @@ package com.example.myblog.service;
 
 import com.example.myblog.mapper.PostMapper;
 import com.example.myblog.model.DTO.PagingParametersDto;
+import com.example.myblog.model.DTO.PostDto;
 import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.DTO.PostsWithParametersDto;
 import com.example.myblog.model.entity.Post;
@@ -40,5 +41,19 @@ public class PostService {
 
     }
 
+    public Post getPostById(Long id){
+        return postRepository.getById(id).orElse(new Post());
+    }
 
+
+    public PostFullDto getPostFullDtoById(Long id) {
+        PostFullDto postFullDto = postMapper.toDto(getPostById(id));
+        if (postFullDto != null)
+            postFullDto.setComments(commentService.getCommentsByPostId(postFullDto.getId()));
+        return postFullDto;
+    }
+
+    public PostFullDto savePost(PostDto postDto) {
+
+    }
 }

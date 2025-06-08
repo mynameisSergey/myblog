@@ -57,7 +57,6 @@ public class PostMapper {
         Post post = mapper.map(postDto, Post.class);
         try {
 
-
             if (postDto.getImage() != null && !postDto.getImage().isEmpty())
                 post.setImage(postDto.getImage().getBytes());
         } catch (IOException e) {

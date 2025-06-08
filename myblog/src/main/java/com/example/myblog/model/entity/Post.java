@@ -1,9 +1,6 @@
 package com.example.myblog.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -11,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Post {
     private Long id;
-    private byte[] image;
     private String title;
     private String text;
     private String tags;
-    private int likesCount;
+    private int likes_count;
+    private byte[] image;
 }

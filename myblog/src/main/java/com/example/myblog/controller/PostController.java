@@ -1,23 +1,24 @@
 package com.example.myblog.controller;
 
+import com.example.myblog.model.DTO.PostDto;
+import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.DTO.PostsWithParametersDto;
+import com.example.myblog.model.entity.Post;
 import com.example.myblog.service.PostService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
 @RequestMapping("/posts")
+@RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
-
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     @GetMapping("/")
     public String redirectPosts() {
@@ -35,5 +36,24 @@ public class PostController {
         model.addAttribute("paging", posts.getPaging());
         return "posts";
     }
+
+    @GetMapping("/{id}")
+    public String getPostById(@PathVariable("id") Long id, Model model) {
+        PostFullDto postFullDto = postService.getPostFullDtoById(id);
+        model.addAttribute("post", postFullDto);
+        return "post";
+    }
+
+    @GetMapping("/add")
+    public String addPostPage() {
+        return "add-post";
+    }
+
+    @PostMapping
+    public String addPost(@ModelAttribute("post") PostDto postDto) {
+        PostFullDto postFullDto = postService.savePost(postDto);
+        return "redirect:/posts/" + postFullDto.getId();
+    }
+
 
 }
