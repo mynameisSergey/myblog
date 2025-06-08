@@ -87,8 +87,31 @@ public class PostController {
     public String addComment(Model model, @PathVariable("id") Long id,
                              @RequestParam(defaultValue = "", name = "text") String text) {
         model.addAttribute("text", text);
-        commentService, save(id, text);
+        commentService.save(id, text);
         return "redirect:/posts/" + id;
+    }
+
+    @PostMapping("/{id}/comments/{commentId}")
+    public String editComment(Model model,
+                              @PathVariable("id") Long id,
+                              @PathVariable("commentId") Long commentId,
+                              @RequestParam(defaultValue = "", name = "text") String text) {
+        model.addAttribute("text", text);
+        commentService.edit(id, commentId, text);
+        return "redirect:/posts/" + id;
+    }
+
+    @PostMapping("/{id}/comments/{commentId}/delete")
+    public String deleteComment(@PathVariable("id") Long id,
+                                @PathVariable("commentId") Long commentId){
+        commentService.deleteById(commentId);
+        return "redirect:/posts/" + id;
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable("id") Long id) {
+        postService.deletePostById(id);
+        return "redirect:/posts";
     }
 
 }

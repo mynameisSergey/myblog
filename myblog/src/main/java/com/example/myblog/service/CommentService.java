@@ -19,6 +19,11 @@ public class CommentService {
         return commentRepository.getCommentsByPostId(postId);
     }
 
-
-
+    public void save(Long id, String text) {
+        Comment comment = Comment.builder()
+                .text(text)
+                .postId(id)
+                .build();
+        commentRepository.save(comment);
+    }
 }

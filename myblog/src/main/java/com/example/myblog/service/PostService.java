@@ -32,7 +32,7 @@ public class PostService {
         List<Post> posts = postRepository.getPosts(search, pageSize, (pageNumber - 1) * pageSize);
         List<PostFullDto> postFullDtos = postMapper.toListDto(posts);
         postFullDtos.forEach(postFullDto ->
-                postFullDto.setComments(commentService.getPostCommentsById(post.getId())));
+                postFullDto.setComments(commentService.getCommentsByPostId(postFullDto.getId())));
         PagingParametersDto pagingParametersDto = PagingParametersDto.builder()
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
@@ -58,7 +58,7 @@ public class PostService {
     public PostFullDto savePost(PostDto postDto) {
         PostFullDto postFullDto = getPostFullDtoById(postRepository.save(postMapper.toPost(postDto)));
         if (postFullDto != null)
-            postFullDto.setComments(commentService.getPostComments(post.getId()));
+            postFullDto.setComments(commentService.getCommentsByPostId(postFullDto.getId()));
         return postFullDto;
 
     }
@@ -86,5 +86,8 @@ public class PostService {
     }
 
 
+    public void deletePostById(Long id) {
+        postRepository.deleteById(id);
+    }
 }
 
