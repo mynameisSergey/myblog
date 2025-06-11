@@ -17,9 +17,9 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-    private PostRepository postRepository;
-    private CommentService commentService;
-    private PostMapper postMapper;
+    private final PostRepository postRepository;
+    private final CommentService commentService;
+    private final PostMapper postMapper;
 
     public PostService(PostRepository postRepository, CommentService commentService, PostMapper postMapper) {
         this.postRepository = postRepository;
@@ -43,11 +43,12 @@ public class PostService {
 
     }
 
+    @Transactional
     public Post getPostById(Long id) {
         return postRepository.getById(id).orElse(new Post());
     }
 
-
+    @Transactional
     public PostFullDto getPostFullDtoById(Long id) {
         PostFullDto postFullDto = postMapper.toDto(getPostById(id));
         if (postFullDto != null)
@@ -55,6 +56,7 @@ public class PostService {
         return postFullDto;
     }
 
+    @Transactional
     public PostFullDto savePost(PostDto postDto) {
         PostFullDto postFullDto = getPostFullDtoById(postRepository.save(postMapper.toPost(postDto)));
         if (postFullDto != null)
@@ -63,10 +65,12 @@ public class PostService {
 
     }
 
+    @Transactional
     public byte[] getImage(Long postId) {
         return postRepository.getById(postId).orElse(new Post()).getImage();
     }
 
+    @Transactional
     public void likePostBById(Long id, boolean like) {
         int currentLikesCount = 0;
         Post post = getPostById(id);
@@ -77,15 +81,17 @@ public class PostService {
                 (currentLikesCount > 0 ? currentLikesCount - 1 : 0)));
     }
 
+    @Transactional
     public PostDto getPostDtoById(Long id) {
         return postMapper.toPostDto(getPostById(id));
     }
 
+    @Transactional
     public void editPostById(Long id, PostDto postDto) {
         postRepository.updateById(id, postMapper.toPost(postDto));
     }
 
-
+    @Transactional
     public void deletePostById(Long id) {
         postRepository.deleteById(id);
     }
