@@ -4,6 +4,7 @@ import com.example.myblog.mapper.PostMapper;
 import com.example.myblog.service.CommentService;
 import com.example.myblog.service.PostService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,12 +37,18 @@ public class CoreTests {
     protected Long maxCommentId = 0L;
 
     @BeforeAll
-    public void createData(){
+    public void createData() {
+        jdbcTemplate.update("insert into post(title, text, tags) values ('Специальный пост', 'Специальный пост', 'comment')");
+        jdbcTemplate.update("insert into post(title, text, tags) values ('Специальный пост1', 'Специальный пост1', 'special')");
+        maxCommentId = jdbcTemplate.queryForObject("select coalesce(max(id), 0) from comment", Long.class);
         maxPostId = jdbcTemplate.queryForObject("select coalesce(max(id), 0) from post", Long.class);
-        jdbcTemplate.update("insert into post(name, post_text, tags) values ('Специальный пост''")")
-
+        jdbcTemplate.update("insert into comment(post_id, comment_text) values (?, 'Специальный комментарий')", maxPostId);
 
     }
 
-
+    @AfterAll
+    void tearDownData() {
+        jdbcTemplate.update("delete from post");
+        jdbcTemplate.update("delete from comment");
+    }
 }
