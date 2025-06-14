@@ -2,7 +2,7 @@
 
 ### Используемые технологии и инструменты:
 
-* Java 21, Spring Framework, JUnit 5, база H2.
+* Java 21, Spring Framework, JUnit 5, база данных H2.
 
 #### Блог состоит из двух веб-страниц (html + javascript): лента постов, страница поста.
 
