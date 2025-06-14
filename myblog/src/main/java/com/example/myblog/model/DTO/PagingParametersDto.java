@@ -1,14 +1,12 @@
 package com.example.myblog.model.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class PagingParametersDto {
     private int pageNumber;
     private int pageSize;

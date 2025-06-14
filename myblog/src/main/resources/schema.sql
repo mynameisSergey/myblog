@@ -9,7 +9,7 @@ create table if not exists post(
 
 create table if not exists comment(
     id bigint auto_increment primary key,
-    comment_text varchar(4000),
+    text varchar(4000),
     post_id bigint not null,
     foreign key (post_id) references post(id) on delete cascade
 );

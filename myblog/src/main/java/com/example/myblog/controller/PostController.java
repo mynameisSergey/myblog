@@ -3,11 +3,9 @@ package com.example.myblog.controller;
 import com.example.myblog.model.DTO.PostDto;
 import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.DTO.PostsWithParametersDto;
-import com.example.myblog.model.entity.Post;
 import com.example.myblog.service.CommentService;
 import com.example.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/posts")
 @RequiredArgsConstructor
-@Slf4j
 public class PostController {
 
     private final PostService postService;

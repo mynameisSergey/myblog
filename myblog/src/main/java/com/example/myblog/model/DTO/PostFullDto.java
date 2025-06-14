@@ -1,13 +1,11 @@
 package com.example.myblog.model.DTO;
 
 import com.example.myblog.model.entity.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -25,5 +23,17 @@ public class PostFullDto {
     public String getTextPreview() {
         if (text == null || text.isEmpty()) return null;
         return text.getFirst();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PostFullDto that = (PostFullDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(text, that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, text);
     }
 }

@@ -3,10 +3,7 @@ import com.example.myblog.controller.PostController;
 import com.example.myblog.mapper.PostMapper;
 import com.example.myblog.service.CommentService;
 import com.example.myblog.service.PostService;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +16,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {WebConfiguration.class})
 @WebAppConfiguration
-@Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CoreTests {
 
@@ -36,17 +32,18 @@ public class CoreTests {
     protected Long maxPostId = 0L;
     protected Long maxCommentId = 0L;
 
-    @BeforeAll
+    @BeforeEach
     public void createData() {
-        jdbcTemplate.update("insert into post(title, text, tags) values ('Специальный пост', 'Специальный пост', 'comment')");
-        jdbcTemplate.update("insert into post(title, text, tags) values ('Специальный пост1', 'Специальный пост1', 'special')");
+        maxPostId = jdbcTemplate.queryForObject("select coalesce(max(id), 0) from post", Long.class);
+        jdbcTemplate.update("insert into post(title, text, tags) values ('Special post', 'Special post', 'comment')");
+        jdbcTemplate.update("insert into post(title, text, tags) values ('Special post1', 'Special post1', 'special')");
         maxCommentId = jdbcTemplate.queryForObject("select coalesce(max(id), 0) from comment", Long.class);
         maxPostId = jdbcTemplate.queryForObject("select coalesce(max(id), 0) from post", Long.class);
-        jdbcTemplate.update("insert into comment(post_id, comment_text) values (?, 'Специальный комментарий')", maxPostId);
+        jdbcTemplate.update("insert into comment(post_id, text) values (?, 'Special comment')", maxPostId);
 
     }
 
-    @AfterAll
+    @AfterEach
     void tearDownData() {
         jdbcTemplate.update("delete from post");
         jdbcTemplate.update("delete from comment");

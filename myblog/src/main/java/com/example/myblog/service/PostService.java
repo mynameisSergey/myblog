@@ -8,6 +8,7 @@ import com.example.myblog.model.DTO.PostsWithParametersDto;
 import com.example.myblog.model.entity.Post;
 import com.example.myblog.repository.JdbcNativePostRepository;
 import com.example.myblog.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,12 @@ import java.util.Optional;
 
 @Service
 public class PostService {
-
-    private final PostRepository postRepository;
-    private final CommentService commentService;
-    private final PostMapper postMapper;
-
-    public PostService(PostRepository postRepository, CommentService commentService, PostMapper postMapper) {
-        this.postRepository = postRepository;
-        this.commentService = commentService;
-        this.postMapper = postMapper;
-    }
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private PostMapper postMapper;
 
     @Transactional
     public PostsWithParametersDto getPosts(String search, int pageNumber, int pageSize) {
@@ -45,7 +42,7 @@ public class PostService {
 
     @Transactional
     public Post getPostById(Long id) {
-        return postRepository.getById(id).orElse(new Post());
+        return postRepository.getById(id).orElseThrow();
     }
 
     @Transactional
@@ -62,7 +59,6 @@ public class PostService {
         if (postFullDto != null)
             postFullDto.setComments(commentService.getCommentsByPostId(postFullDto.getId()));
         return postFullDto;
-
     }
 
     @Transactional

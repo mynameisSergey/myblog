@@ -4,7 +4,6 @@ import com.example.myblog.model.DTO.PostDto;
 import com.example.myblog.model.DTO.PostFullDto;
 import com.example.myblog.model.entity.Post;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.modelmapper.ModelMapper;
@@ -14,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class PostMapper {

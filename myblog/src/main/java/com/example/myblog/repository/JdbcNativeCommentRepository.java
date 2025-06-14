@@ -19,14 +19,14 @@ public class JdbcNativeCommentRepository implements CommentRepository {
                 (rs, rowNum) -> Comment.builder()
                         .id(rs.getLong("id"))
                         .text(rs.getString("text"))
-                        .postId(rs.getLong("post_id"))
+                        .post_id(rs.getLong("post_id"))
                         .build(), postId);
     }
 
     @Override
     public void save(Comment comment) {
         jdbcTemplate.update("insert into comment(text, post_id) values(?, ?)",
-                comment.getText(), comment.getPostId());
+                comment.getText(), comment.getPost_id());
     }
 
     @Override
@@ -37,6 +37,6 @@ public class JdbcNativeCommentRepository implements CommentRepository {
     @Override
     public void updateById(Long id, Comment comment) {
         jdbcTemplate.update("update comment set text = ?, post_id = ? where id = ?",
-                comment.getText(), comment.getPostId(), id);
+                comment.getText(), comment.getPost_id(), id);
     }
 }

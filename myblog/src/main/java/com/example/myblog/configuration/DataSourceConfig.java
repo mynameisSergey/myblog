@@ -6,39 +6,41 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
-import java.sql.Driver;
 
 @Configuration
 public class DataSourceConfig {
 
     @Bean
     @Profile("dev")
-    public DataSource devDataSource(@Value("${spring.datasource.url}") String url,
-                                 @Value("${spring.datasource.username}") String userName,
-                                 @Value("${spring.datasource.password}") String password) {
+    public DataSource devDataSource(@Value("${spring.datasource.driverClassName}") String driver,
+                                    @Value("${spring.datasource.url}") String url,
+                                    @Value("${spring.datasource.username}") String username,
+                                    @Value("${spring.datasource.password}") String password) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Driver.class.getName());
+        dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
-        dataSource.setUsername(userName);
+        dataSource.setUsername(username);
         dataSource.setPassword(password);
         return dataSource;
     }
 
     @Bean
     @Profile("test")
-    public DataSource testDataSource(@Value("${test.spring.datasource.url}") String url,
-                                 @Value("${test.spring.datasource.username}") String userName,
-                                 @Value("${test.spring.datasource.password}") String password) {
+    public DataSource testDataSource(@Value("${test.spring.datasource.driverClassName}") String driver,
+                                     @Value("${test.spring.datasource.url}") String url,
+                                     @Value("${test.spring.datasource.username}") String username,
+                                     @Value("${test.spring.datasource.password}") String password) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Driver.class.getName());
+        dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
-        dataSource.setUsername(userName);
+        dataSource.setUsername(username);
         dataSource.setPassword(password);
         return dataSource;
     }
@@ -48,6 +50,7 @@ public class DataSourceConfig {
         return new JdbcTemplate(dataSource);
     }
 
+    @EventListener
     public void populate(ContextRefreshedEvent event) {
         DataSource dataSource = event.getApplicationContext().getBean(DataSource.class);
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
