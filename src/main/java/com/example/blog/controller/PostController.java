@@ -1,8 +1,5 @@
 package com.example.blog.controller;
 
-import com.example.blog.model.DTO.PostDto;
-import com.example.blog.model.DTO.PostFullDto;
-import com.example.blog.model.DTO.PostsWithParametersDto;
 import com.example.blog.service.CommentService;
 import com.example.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
