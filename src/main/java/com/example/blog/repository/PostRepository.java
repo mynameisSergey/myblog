@@ -1,0 +1,23 @@
+package com.example.blog.repository;
+
+import com.example.blog.model.entity.Post;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public interface PostRepository extends JpaRepository<Post, Long> {
+    Page<Post> getPostsByTagsLike(String search, Pageable page);
+
+    @Modifying
+    @Query(value = "update posts set title = :title, text = :text, tags = :tags where id = :id ", nativeQuery = true)
+    void editByIdWithoutImage(@Param("id") Long id, @Param("title") String title, @Param("text") String text, @Param("tags") String tags);
+
+    @Modifying
+    @Query(value = "update posts set likes_count = :likesCount where id = :id ", nativeQuery = true)
+    void likeById(@Param("id") Long id, @Param("likesCount") int likesCount);
+}

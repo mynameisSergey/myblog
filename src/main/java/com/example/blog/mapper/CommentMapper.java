@@ -1,8 +1,12 @@
 package com.example.blog.mapper;
 
+import com.example.blog.model.dto.CommentDto;
+import com.example.blog.model.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor

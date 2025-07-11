@@ -1,8 +1,12 @@
 package com.example.blog.mapper;
 
-import com.example.blog.model.Post;
+import com.example.blog.model.dto.PostDto;
+import com.example.blog.model.dto.PostFullDto;
+import com.example.blog.model.entity.Post;
+import com.example.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.modelmapper.ModelMapper;
 
@@ -44,9 +48,10 @@ public class PostMapper {
         return dto;
     }
 
-    public List<PostFullDto> toListDto(List<Post> posts) {
-        return posts.stream().map(this::toDto).toList();
+    public List<PostFullDto> toListDto(Page<Post> entities) {
+        return entities.stream().map(this::toDto).toList();
     }
+
 
     public Post toPost(PostDto postDto) {
         if (postDto == null)
