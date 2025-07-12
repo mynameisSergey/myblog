@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostService {
-
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
@@ -45,7 +44,7 @@ public class PostService {
 
     @Transactional
     public PostFullDto savePost(PostDto post) {
-        return postMapper.toDto((postRepository.save(postMapper.toPost(post))));
+        return postMapper.toDto(postRepository.save(postMapper.toPost(post)));
     }
 
     @Transactional
@@ -65,20 +64,20 @@ public class PostService {
     }
 
     @Transactional
-    public  void likePostById(Long id, boolean like) {
+    public void likePostById(Long id, boolean like) {
         int currentLikesCount = 0;
         Post post = getPostById(id);
-        if(post != null)
+        if (post != null) {
             currentLikesCount = post.getLikesCount();
-
-        postRepository.likeById(id, (like ? currentLikesCount+1 : (currentLikesCount > 0 ? currentLikesCount - 1 : 0)));
+        }
+        postRepository.likeById(id, (like ? currentLikesCount + 1 : (currentLikesCount > 0 ? currentLikesCount - 1 : 0)));
     }
 
-    public  Post getPostById(Long id) {
-        return  postRepository.findById(id).orElse(new Post());
+    public Post getPostById(Long id) {
+        return postRepository.findById(id).orElse(new Post());
     }
 
-    public  byte[] getImage(Long id) {
+    public byte[] getImage(Long id) {
         return postRepository.findById(id).orElse(new Post()).getImage();
     }
 

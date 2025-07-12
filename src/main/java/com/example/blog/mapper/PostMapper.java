@@ -5,6 +5,7 @@ import com.example.blog.model.dto.PostFullDto;
 import com.example.blog.model.entity.Post;
 import com.example.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -13,12 +14,11 @@ import org.modelmapper.ModelMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class PostMapper {
-
     private final ModelMapper mapper;
     private final CommentService commentService;
 
@@ -26,25 +26,15 @@ public class PostMapper {
     private String imagePath;
 
     public PostFullDto toDto(Post entity) {
-        if (entity == null) return null;
         PostFullDto dto = mapper.map(entity, PostFullDto.class);
-
-        dto.setText(
-                Optional.ofNullable(entity.getText())
-                        .filter(text -> !text.isBlank())
-                        .map(text -> Arrays.stream(text.split("\n")).toList())
-                        .orElse(List.of())
-        );
-
-        dto.setTags(
-                Optional.ofNullable(entity.getTags())
-                        .filter(tags -> !tags.isBlank())
-                        .map(tags -> Arrays.stream(tags.split(",\s*|\s+")).toList())
-                        .orElse(List.of())
-        );
-
-        dto.setImagePath(imagePath + dto.getId());
-        dto.setComments(commentService.getPostComments(entity.getId()));
+        if (dto != null) {
+            if (entity.getText() != null && !entity.getText().isBlank())
+                dto.setText(Arrays.stream(entity.getText().split("\n")).toList());
+            if (entity.getTags() != null && !entity.getTags().isBlank())
+                dto.setTags(Arrays.stream(entity.getTags().split(",|, | ")).toList());
+            dto.setImagePath(imagePath + dto.getId());
+            dto.setComments(commentService.getPostComments(entity.getId()));
+        }
         return dto;
     }
 
@@ -52,18 +42,15 @@ public class PostMapper {
         return entities.stream().map(this::toDto).toList();
     }
 
-
-    public Post toPost(PostDto postDto) {
-        if (postDto == null)
-            return null;
-
-        Post post = mapper.map(postDto, Post.class);
-        try {
-
-            if (postDto.getImage() != null && !postDto.getImage().isEmpty())
-                post.setImage(postDto.getImage().getBytes());
-        } catch (IOException e) {
-            return post;
+    public Post toPost(PostDto dto) {
+        Post post = mapper.map(dto, Post.class);
+        if (post != null) {
+            try {
+                if (dto.getImage() != null && !dto.getImage().isEmpty())
+                    post.setImage(dto.getImage().getBytes());
+            } catch (IOException e) {
+                return post;
+            }
         }
         return post;
     }
@@ -73,9 +60,7 @@ public class PostMapper {
         if (likesCount != 0) post.setLikesCount(likesCount);
         return post;
     }
-
     public PostDto toPostDto(Post post) {
         return mapper.map(post, PostDto.class);
     }
-
 }

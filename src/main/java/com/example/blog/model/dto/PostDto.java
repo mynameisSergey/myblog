@@ -5,10 +5,10 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Builder
 public class PostDto {
     private Long id;
     private String title;

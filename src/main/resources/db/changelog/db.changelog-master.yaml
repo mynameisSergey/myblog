@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_post
+      author: Sergey
+      changes:
+        - createTable:
+            tableName: posts
+            remarks: Посты
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: id поста
+              - column:
+                  name: title
+                  type: VARCHAR(250)
+                  constraints:
+                    nullable: false
+                  remarks: Наименование поста
+              - column:
+                  name: text
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: false
+                  remarks: Текст поста
+              - column:
+                  name: tags
+                  type: VARCHAR(4000)
+                  remarks: Теги
+              - column:
+                  name: likes_count
+                  type: INTEGER
+                  defaultValueNumeric: 0
+                  remarks: Лайки
+              - column:
+                  name: image
+                  type: BLOB
+                  remarks: Картинка
+
+  - changeSet:
+      id: create_comment
+      author: Sergey
+      changes:
+        - createTable:
+            tableName: comments
+            remarks: Комментарии к постам
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: id комментария
+              - column:
+                  name: post_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                  remarks: id поста
+              - column:
+                  name: text
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: false
+                  remarks: Текст комментария

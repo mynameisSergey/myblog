@@ -4,8 +4,6 @@ import lombok.*;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class PagingParametersDto {
     private int pageNumber;

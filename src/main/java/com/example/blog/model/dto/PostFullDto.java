@@ -20,6 +20,6 @@ public class PostFullDto {
 
     public String getTextPreview() {
         if (text == null || text.isEmpty()) return null;
-        return text.getFirst();
+        return text.get(0);
     }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
@@ -27,7 +26,7 @@ public class CommentService {
                 .text(text)
                 .postId(postId)
                 .build();
-    return commentRepository.save(commentMapper.toComment(comment));
+        return commentRepository.save(commentMapper.toComment(comment));
     }
 
     @Transactional

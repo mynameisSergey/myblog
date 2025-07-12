@@ -12,12 +12,12 @@ import lombok.*;
 @Table(name = "posts")
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ToString.Exclude
+    private byte[] image;
     private String title;
     private String text;
     private String tags;
     private int likesCount;
-    @ToString.Exclude
-    private byte[] image;
 }
