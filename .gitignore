@@ -1,7 +1,7 @@
 # Compiled class file
 *.class
-myblog/out/production/
-myblog/
+out/production/myblog/
+
 
 # Log file
 *.log
