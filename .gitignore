@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-out/production/myblog/
+*out/production/myblog/
 
 
 # Log file
