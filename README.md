@@ -2,7 +2,7 @@
 
 ### Используемые технологии и инструменты:
 
-* Java 21, Spring Framework, JUnit 5, база данных H2.
+* Java 21, Spring Framework 6.1.14 (Context, Web, WebMVC), Spring Data JDBC 3.2.5, H2, Thymeleaf, Lombok, Jackson, ModelMapper, JUnit 5, Mockito, Apache Commons FileUpload, Commons IO, SLF4J, Jakarta Servlet API, Maven.
 
 #### Блог состоит из двух веб-страниц (html + javascript): лента постов, страница поста.
 
